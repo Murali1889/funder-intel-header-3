@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222 47% 11%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #d4af37 0%, #f2dc9e 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.section-divider {
+  position: relative;
+  height: 100px;
+  overflow: hidden;
+}
+
+.section-divider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, transparent 49.5%, #0c1b36 50%);
+}
+
+.section-divider-reverse {
+  position: relative;
+  height: 100px;
+  overflow: hidden;
+}
+
+.section-divider-reverse::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom left, transparent 49.5%, #0c1b36 50%);
+}
+
+.glass-card {
+  background: rgba(10, 15, 36, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stats-item {
+  @apply flex flex-col items-center;
+}
+
+.stats-number {
+  @apply text-3xl md:text-4xl font-bold text-white mb-1;
+}
+
+.stats-label {
+  @apply text-sm text-gray-400;
+}
+
+.category-card {
+  @apply relative overflow-hidden rounded-xl bg-primary transition-all duration-500 hover:shadow-lg border border-white/5 hover:border-accent/20;
+  transform: translateY(0);
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.category-badge {
+  @apply absolute top-4 left-4 bg-accent text-accent-foreground text-xs font-medium px-3 py-1 rounded-full;
+}
+
+.category-title {
+  @apply text-xl font-bold text-white mb-2;
+}
+
+.category-description {
+  @apply text-sm text-gray-400 mb-4;
+}
+
+.category-button {
+  @apply inline-flex items-center text-sm text-white border border-white/10 rounded-md px-4 py-2 hover:bg-white/5 hover:border-accent/30 hover:text-accent transition-all duration-300;
+}
+
+.pricing-card {
+  @apply bg-primary/50 backdrop-blur-sm rounded-lg p-6 border border-white/5 transition-all duration-500;
+  transform: translateY(0);
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-popular {
+  @apply border-accent relative;
+}
+
+.pricing-title {
+  @apply text-2xl font-bold text-white mb-1;
+}
+
+.pricing-description {
+  @apply text-sm text-gray-400 mb-4;
+}
+
+.pricing-price {
+  @apply text-3xl font-bold text-white mb-6;
+}
+
+.pricing-feature {
+  @apply flex items-start text-gray-300 mb-3;
+}
+
+.pricing-check {
+  @apply text-accent mr-2 mt-0.5;
+}
+
+.partner-card {
+  @apply bg-primary rounded-lg p-6 hover:shadow-lg transition-all duration-500 border border-white/5 hover:border-accent/20;
+  transform: translateY(0);
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+.partner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Improve button sizing consistency */
+.btn-lg {
+  @apply px-6 py-3 text-base;
+}
+
+.btn-md {
+  @apply px-4 py-2 text-sm;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+/* Improve text contrast on hover */
+.hover-text-contrast:hover {
+  @apply text-white;
+}
+
+.hover-bg-contrast:hover {
+  @apply bg-primary text-white;
+}
+
