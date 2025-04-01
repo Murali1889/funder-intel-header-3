@@ -3,16 +3,13 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { LiveChatWidget } from "@/components/live-chat-widget"
+import SiteFooter from "@/components/site-footer"
+import SiteHeader from "@/components/site-header"
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "FunderIntel | The Business Lending Intelligence Platform",
+  title: "FunderIntel - Business Lending Intelligence Platform",
   description:
     "The premier marketplace and intelligence platform for the business lending industry, connecting funders, brokers, and service providers.",
     generator: 'v0.dev'
@@ -24,11 +21,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-secondary text-foreground antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
-          {children}
-          <LiveChatWidget />
+    <html lang="en">
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            {children}
+            <SiteFooter />
+          </div>
         </ThemeProvider>
       </body>
     </html>

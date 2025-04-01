@@ -1,529 +1,334 @@
-"use client"
-
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
+import { Search, Filter, Calendar, User, ArrowRight } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Clock, ChevronDown, MoreVertical } from "lucide-react"
-import { motion } from "framer-motion"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/animations"
 
-// Animation variants
-const fadeInUpVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (custom: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      delay: custom * 0.15,
-      ease: [0.25, 0.1, 0.25, 1.0],
-    },
-  }),
-}
-
-// Sample blog categories
-const categories = [
-  { name: "All Posts", slug: "all" },
-  { name: "Alt Finance", slug: "alt-finance" },
-  { name: "Commercial Finance", slug: "commercial-finance" },
-  { name: "Videos", slug: "videos" },
-  { name: "Business", slug: "business" },
-  { name: "Fintech", slug: "fintech" },
-  { name: "Regulation", slug: "regulation" },
-  { name: "Industry News", slug: "industry-news" },
-]
-
-// Sample blog posts with real images
 const blogPosts = [
   {
-    id: 1,
-    title: "Par Funding CEO Joseph LaForte Sentenced in $404M Fraud Case",
+    id: "business-lending-trends-2025",
+    title: "Business Lending Trends to Watch in 2025",
     excerpt:
-      "Joseph LaForte, the CEO of Par Funding (officially Complete Business Solutions Group), was sentenced to 20 years in prison for his role in a $404 million fraud scheme that affected thousands of investors.",
-    image:
-      "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Alt Finance",
-    author: "Staff Writer",
-    date: "5 days ago",
-    readTime: "5 min read",
+      "The business lending landscape is evolving rapidly. From AI-powered underwriting to embedded finance solutions, discover the key trends that will shape the industry in 2025 and beyond.",
+    date: "March 15, 2025",
+    author: "John Smith",
+    category: "Industry",
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2070&auto=format&fit=crop",
     featured: true,
   },
   {
-    id: 2,
-    title: "Governor Youngkin Vetoes Virginia SB 1252: A Win for Fintech or a Setback?",
+    id: "mca-vs-term-loans",
+    title: "MCA vs Term Loans: Which is Right for Your Client?",
     excerpt:
-      "Governor Youngkin's decision to veto SB 1252 protects access to safe, responsible credit for Virginia consumers and businesses. The bill would have imposed severe restrictions on certain lending practices.",
-    image:
-      "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Regulation",
-    author: "Staff Writer",
-    date: "5 days ago",
-    readTime: "4 min read",
-    featured: true,
+      "A comprehensive comparison of merchant cash advances and term loans to help brokers make the right recommendation for their clients' specific needs and circumstances.",
+    date: "March 10, 2025",
+    author: "Sarah Johnson",
+    category: "Funding",
+    image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=2187&auto=format&fit=crop",
   },
   {
-    id: 3,
-    title: "SBA Reinstates Guarantee Fees Effective March 27th",
+    id: "broker-success-strategies",
+    title: "5 Proven Strategies for Broker Success in 2025",
     excerpt:
-      "According to SBA notice 5000-865758, loans that have not received SBA authorization by March 27, 2025, will be subject to the reinstated guarantee fees. This change affects all SBA loan programs.",
-    image:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Business",
-    author: "Staff Writer",
-    date: "Mar 24",
-    readTime: "3 min read",
-    featured: true,
+      "Top business loan brokers share their secrets for building a thriving practice in today's competitive market, from lead generation to closing deals.",
+    date: "March 5, 2025",
+    author: "Michael Chen",
+    category: "Brokers",
+    image: "https://images.unsplash.com/photo-1607863680198-23d4b2565df0?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    id: 4,
-    title: "Saturday Business & Finance Brief: SBA Loan Updates",
+    id: "sba-loan-changes",
+    title: "New SBA Loan Changes: What You Need to Know",
     excerpt:
-      "This week's business and finance brief covers the latest SBA loan program changes, interest rate impacts, and new opportunities for small business owners seeking capital.",
-    image:
-      "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Business",
-    author: "Staff Writer",
-    date: "Mar 22",
-    readTime: "6 min read",
+      "A breakdown of the latest changes to SBA loan programs and how they impact lenders and borrowers in the current economic climate.",
+    date: "February 28, 2025",
+    author: "David Williams",
+    category: "Government",
+    image: "https://images.unsplash.com/photo-1436303945392-0d1e373a40d9?q=80&w=2048&auto=format&fit=crop",
   },
   {
-    id: 5,
-    title: "SmartBiz Acquisition of Centrust Bank: A New Era for Small Business Lending",
+    id: "underwriting-technology",
+    title: "How AI is Revolutionizing Underwriting",
     excerpt:
-      "The acquisition of Centrust Bank by SmartBiz represents a significant shift in the small business lending landscape, potentially streamlining the loan approval process for entrepreneurs.",
-    image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Fintech",
-    author: "Staff Writer",
-    date: "Mar 19",
-    readTime: "4 min read",
+      "Explore how artificial intelligence and machine learning are transforming the underwriting process for lenders and creating new opportunities and challenges.",
+    date: "February 20, 2025",
+    author: "Emily Rodriguez",
+    category: "Technology",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    id: 6,
-    title: "What does it take to start a funding company in 2025?",
+    id: "alternative-funding-options",
+    title: "Beyond Traditional Loans: Alternative Funding Options",
     excerpt:
-      "Starting a funding company in today's regulatory environment requires more than capital. We explore the licensing, compliance, technology, and partnership requirements for new entrants.",
-    image:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Industry News",
-    author: "Shane Mahabir",
-    date: "Mar 17",
-    readTime: "7 min read",
-  },
-  {
-    id: 7,
-    title: "Here's why banks don't want the CFPB to disappear",
-    excerpt:
-      "Contrary to popular belief, many banks support the continued existence of the Consumer Financial Protection Bureau. We examine the reasons behind this surprising stance.",
-    image:
-      "https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Regulation",
-    author: "Shane Mahabir",
-    date: "Mar 12",
-    readTime: "5 min read",
-  },
-  {
-    id: 8,
-    title: "The Future of Consumer Financial Regulation Under New Leadership",
-    excerpt:
-      "With new leadership at key regulatory agencies, we analyze the potential shifts in consumer financial regulation and what it means for lenders and fintech companies.",
-    image:
-      "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Regulation",
-    author: "Shane Mahabir",
-    date: "Mar 4",
-    readTime: "6 min read",
-  },
-  {
-    id: 9,
-    title: "Small Business Cash Flow Trend Report: Q1 2025",
-    excerpt:
-      "Our quarterly analysis of small business cash flow trends reveals important insights for lenders, investors, and business owners about the current economic landscape.",
-    image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "Business",
-    author: "Shane Mahabir",
-    date: "Feb 28",
-    readTime: "8 min read",
+      "From revenue-based financing to crowdfunding, discover alternative funding solutions that can help businesses grow when traditional loans aren't available.",
+    date: "February 15, 2025",
+    author: "Robert Taylor",
+    category: "Funding",
+    image: "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=2070&auto=format&fit=crop",
   },
 ]
 
 export default function BlogPage() {
-  const [activeCategory, setActiveCategory] = useState("all")
-  const [searchQuery, setSearchQuery] = useState("")
-
-  // Filter posts based on active category and search query
-  const filteredPosts = blogPosts.filter((post) => {
-    const matchesCategory = activeCategory === "all" || post.category.toLowerCase() === activeCategory
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
-  // Separate featured posts
-  const featuredPosts = filteredPosts.filter((post) => post.featured)
-  const regularPosts = filteredPosts.filter((post) => !post.featured)
+  const featuredPost = blogPosts.find((post) => post.featured)
+  const regularPosts = blogPosts.filter((post) => !post.featured)
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <SiteHeader />
-
+    <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="bg-primary py-16 md:py-20 relative">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3')] bg-cover bg-center opacity-10"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <motion.div className="text-center" initial="hidden" animate="visible" variants={fadeInUpVariants} custom={0}>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">FunderIntel Blog</h1>
-            <p className="text-lg text-white/80 max-w-2xl mx-auto">
-              Stay informed with the latest news, insights, and trends in the business lending industry
-            </p>
-          </motion.div>
+      <section className="w-full py-16 md:py-24 bg-blue-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1586282391129-76a6df230234?q=80&w=2070&auto=format&fit=crop"
+            alt="Business blog"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950 via-blue-900/90 to-blue-950"></div>
         </div>
-      </section>
 
-      {/* Filter and Search Section */}
-      <section className="border-b border-gray-200 sticky top-20 z-40 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center py-4">
-            {/* Categories */}
-            <motion.div
-              className="flex items-center overflow-x-auto hide-scrollbar space-x-1 md:space-x-2 pb-2 md:pb-0 w-full md:w-auto"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1.0] }}
-            >
-              {categories.map((category, index) => (
-                <Button
-                  key={category.slug}
-                  variant="ghost"
-                  size="sm"
-                  className={`whitespace-nowrap rounded-full px-4 transition-all duration-500 ${
-                    activeCategory === category.slug
-                      ? "bg-primary text-white hover:bg-primary/90"
-                      : "text-gray-600 hover:text-white hover:bg-primary/80"
-                  }`}
-                  onClick={() => setActiveCategory(category.slug)}
-                >
-                  {category.name}
-                </Button>
-              ))}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-600 hover:text-primary hover:bg-gray-100 whitespace-nowrap rounded-full px-4"
-              >
-                More
-                <ChevronDown className="ml-1 h-4 w-4" />
-              </Button>
-            </motion.div>
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <h1 className="text-4xl font-bold mb-2">Business Lending Blog</h1>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl">
+              Industry insights, tips, and news for business lending professionals
+            </p>
+          </FadeIn>
 
-            {/* Search */}
-            <motion.div
-              className="relative w-full md:w-auto mt-3 md:mt-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.1, 0.25, 1.0] }}
-            >
+          <div className="flex flex-col md:flex-row gap-4 mb-8">
+            <div className="relative flex-1">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-blue-300" />
               <Input
                 type="search"
                 placeholder="Search articles..."
-                className="w-full md:w-[260px] h-9 pl-9 border-gray-200 focus-visible:ring-primary"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 bg-blue-900/50 border-blue-700 text-white placeholder:text-blue-300"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            </motion.div>
+            </div>
+            <Button variant="outline" className="bg-blue-900/50 border-blue-700 text-white hover:bg-blue-800">
+              <Filter className="mr-2 h-4 w-4" />
+              Filters
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Featured Posts */}
-      {featuredPosts.length > 0 && (
-        <section className="py-10 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <motion.h2
-              className="text-2xl font-bold text-primary mb-6"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUpVariants}
-              custom={0}
-            >
-              Featured Stories
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {featuredPosts.map((post, index) => (
-                <Link href={`/blog/${post.id}`} key={post.id}>
-                  <motion.div
-                    className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 h-full flex flex-col"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeInUpVariants}
-                    custom={index * 0.1 + 0.2}
-                  >
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <Image
-                        src={post.image || "/placeholder.svg"}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute top-0 left-0 m-3">
-                        <span className="inline-block bg-primary text-white text-xs px-2 py-1 rounded">
-                          {post.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-5 flex-grow flex flex-col">
-                      <div className="flex items-center text-sm text-gray-500 mb-2">
-                        <div className="flex items-center">
-                          <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">
-                            {post.author.charAt(0)}
+      <div className="container py-8">
+        <Tabs defaultValue="all" className="mb-8">
+          <TabsList className="mb-6">
+            <TabsTrigger value="all">All Posts</TabsTrigger>
+            <TabsTrigger value="alt-finance">Alt Finance</TabsTrigger>
+            <TabsTrigger value="commercial-finance">Commercial Finance</TabsTrigger>
+            <TabsTrigger value="videos">Videos</TabsTrigger>
+            <TabsTrigger value="business">Business</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all">
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="w-full md:w-3/4">
+                {/* Featured Article */}
+                {featuredPost && (
+                  <FadeIn>
+                    <Card className="bg-white border border-gray-200 overflow-hidden mb-12 hover:shadow-lg transition-all">
+                      <div className="md:flex">
+                        <div className="md:w-1/2 relative h-60 md:h-auto">
+                          <Image
+                            src={featuredPost.image || "/placeholder.svg"}
+                            alt={featuredPost.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="p-6 md:w-1/2">
+                          <Badge className="mb-2">Featured</Badge>
+                          <h2 className="text-2xl font-bold mb-2 text-gray-900">
+                            <Link href={`/blog/${featuredPost.id}`} className="hover:text-primary">
+                              {featuredPost.title}
+                            </Link>
+                          </h2>
+                          <div className="flex items-center text-sm text-muted-foreground mb-4">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            <span className="mr-4">{featuredPost.date}</span>
+                            <User className="h-4 w-4 mr-1" />
+                            <span>{featuredPost.author}</span>
                           </div>
-                          <span>{post.author}</span>
+                          <p className="text-gray-600 mb-4">{featuredPost.excerpt}</p>
+                          <Button variant="primary" asChild>
+                            <Link href={`/blog/${featuredPost.id}`}>
+                              Read More
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                          </Button>
                         </div>
-                        <span className="mx-2">•</span>
-                        <span>{post.date}</span>
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors duration-500 mb-2 line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{post.excerpt}</p>
-                      <div className="flex items-center text-xs text-gray-500">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>{post.readTime}</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+                    </Card>
+                  </FadeIn>
+                )}
 
-      {/* All Posts */}
-      <section className="py-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.h2
-            className="text-2xl font-bold text-primary mb-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUpVariants}
-            custom={0}
-          >
-            Latest Articles
-          </motion.h2>
+                {/* Regular Articles */}
+                <FadeIn>
+                  <h2 className="text-2xl font-bold mb-6 text-gray-900">Latest Articles</h2>
+                </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-            {regularPosts.length > 0 ? (
-              regularPosts.map((post, index) => (
-                <Link href={`/blog/${post.id}`} key={post.id}>
-                  <motion.article
-                    className="group relative flex flex-col h-full"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeInUpVariants}
-                    custom={index * 0.1 + 0.2}
-                  >
-                    <div className="relative h-52 w-full overflow-hidden rounded-lg mb-4">
-                      <Image
-                        src={post.image || "/placeholder.svg"}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute top-0 right-0 m-3">
-                        <button className="p-1.5 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors duration-500">
-                          <MoreVertical className="h-4 w-4 text-gray-700" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">
-                          {post.author.charAt(0)}
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {regularPosts.map((post, index) => (
+                    <StaggerItem key={index}>
+                      <Card className="bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-all">
+                        <div className="relative h-48">
+                          <Image
+                            src={post.image || "/placeholder.svg"}
+                            alt={post.title}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
-                        <span>{post.author}</span>
-                      </div>
-                      <span className="mx-2">•</span>
-                      <span>{post.date}</span>
-                    </div>
+                        <div className="p-4">
+                          <Badge className="mb-2">{post.category}</Badge>
+                          <h3 className="text-xl font-bold mb-2 text-gray-900">
+                            <Link href={`/blog/${post.id}`} className="hover:text-primary">
+                              {post.title}
+                            </Link>
+                          </h3>
+                          <div className="flex items-center text-sm text-muted-foreground mb-3">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            <span className="mr-4">{post.date}</span>
+                            <User className="h-4 w-4 mr-1" />
+                            <span>{post.author}</span>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">{post.excerpt}</p>
+                          <Button variant="outline" size="sm" asChild>
+                            <Link href={`/blog/${post.id}`} className="text-blue-600">
+                              Read More
+                            </Link>
+                          </Button>
+                        </div>
+                      </Card>
+                    </StaggerItem>
+                  ))}
+                </StaggerContainer>
 
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors duration-500 mb-2 line-clamp-2">
-                      {post.title}
-                    </h3>
+                <FadeIn direction="up" delay={0.3}>
+                  <div className="flex justify-center mt-12 text-black">
+                    <Button variant="outline" asChild>
+                      <Link href="/blog/archive">
+                        View All Articles
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </FadeIn>
+              </div>
 
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{post.excerpt}</p>
+              <div className="w-full md:w-1/4">
+                <FadeIn direction="right">
+                  <div className="bg-slate-50 p-6 rounded-lg border mb-6">
+                    <h3 className="font-bold text-lg mb-4 text-gray-900">Categories</h3>
+                    <ul className="space-y-2">
+                      <li>
+                        <Link href="/blog/category/funding" className="text-primary hover:underline">
+                          Funding Solutions (24)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/blog/category/brokers" className="text-primary hover:underline">
+                          Broker Strategies (18)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/blog/category/technology" className="text-primary hover:underline">
+                          Technology (15)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/blog/category/industry" className="text-primary hover:underline">
+                          Industry News (12)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/blog/category/government" className="text-primary hover:underline">
+                          Government Programs (9)
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/blog/category/marketing" className="text-primary hover:underline">
+                          Marketing (7)
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
 
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-primary font-medium">{post.category}</span>
-                      <div className="flex items-center text-gray-500">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>{post.readTime}</span>
-                      </div>
-                    </div>
-                  </motion.article>
-                </Link>
-              ))
-            ) : (
-              <motion.div
-                className="col-span-full py-20 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1.0] }}
-              >
-                <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => {
-                    setActiveCategory("all")
-                    setSearchQuery("")
-                  }}
-                >
-                  Reset Filters
-                </Button>
-              </motion.div>
-            )}
-          </div>
+                  <div className="bg-slate-50 p-6 rounded-lg border mb-6">
+                    <h3 className="font-bold text-lg mb-4 text-gray-900">Popular Posts</h3>
+                    <ul className="space-y-4">
+                      {blogPosts.slice(0, 3).map((post, index) => (
+                        <li key={index}>
+                          <Link href={`/blog/${post.id}`} className="flex items-start gap-3 group">
+                            <div className="relative w-16 h-16 flex-shrink-0">
+                              <Image
+                                src={post.image || "/placeholder.svg"}
+                                alt={post.title}
+                                fill
+                                className="object-cover rounded"
+                              />
+                            </div>
+                            <div>
+                              <p className="font-medium group-hover:text-primary line-clamp-2 text-gray-900">
+                                {post.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground">{post.date}</p>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-          {/* Pagination */}
-          {regularPosts.length > 0 && (
-            <motion.div
-              className="mt-12 flex justify-center"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUpVariants}
-              custom={1}
-            >
-              <nav className="flex items-center space-x-1">
-                <Button variant="outline" size="icon" className="w-9 h-9" disabled>
-                  <span className="sr-only">First page</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
-                      clipRule="evenodd"
+                  <div className="bg-blue-900 text-white p-6 rounded-lg">
+                    <h3 className="font-bold text-lg mb-4">Subscribe to Our Newsletter</h3>
+                    <p className="text-sm text-blue-100 mb-4">
+                      Get the latest industry news and insights delivered to your inbox.
+                    </p>
+                    <Input
+                      type="email"
+                      placeholder="Your email address"
+                      className="mb-3 bg-white/10 border-white/20 text-white placeholder:text-white/70"
                     />
-                  </svg>
-                </Button>
-                <Button variant="outline" size="icon" className="w-9 h-9" disabled>
-                  <span className="sr-only">Previous</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-primary text-white border-primary hover:bg-primary/90 hover:text-white transition-colors duration-500"
-                >
-                  1
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  2
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  3
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  4
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  5
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-9 h-9 transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  <span className="sr-only">Next</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="w-9 h-9 transition-colors duration-500 hover:bg-primary hover:text-white"
-                >
-                  <span className="sr-only">Last page</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L8.586 10 4.293 14.293a1 1 0 000 1.414zm6 0a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L14.586 10l-4.293 4.293a1 1 0 000 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </Button>
-              </nav>
-            </motion.div>
-          )}
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="py-16 bg-primary relative">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3')] bg-cover bg-center opacity-10"></div>
-        <div className="max-w-3xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUpVariants}
-            custom={0}
-          >
-            <h2 className="text-2xl font-bold text-white mb-3">Subscribe to Our Newsletter</h2>
-            <p className="text-white/80 mb-6">
-              Get the latest industry news and insights delivered straight to your inbox
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-              <Input
-                type="email"
-                placeholder="Your email address"
-                className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus-visible:ring-accent/30"
-              />
-              <Button className="h-10 bg-accent hover:bg-accent-light text-secondary whitespace-nowrap transition-colors duration-500">
-                Subscribe
-              </Button>
+                    <Button className="w-full" variant="primary">
+                      Subscribe
+                    </Button>
+                  </div>
+                </FadeIn>
+              </div>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </TabsContent>
 
-      <SiteFooter />
+          <TabsContent value="alt-finance">
+            <div className="p-8 text-center text-muted-foreground">
+              Select the "Alt Finance" tab to see articles about alternative financing options
+            </div>
+          </TabsContent>
+
+          <TabsContent value="commercial-finance">
+            <div className="p-8 text-center text-muted-foreground">
+              Select the "Commercial Finance" tab to see articles about commercial financing
+            </div>
+          </TabsContent>
+
+          <TabsContent value="videos">
+            <div className="p-8 text-center text-muted-foreground">Select the "Videos" tab to see video content</div>
+          </TabsContent>
+
+          <TabsContent value="business">
+            <div className="p-8 text-center text-muted-foreground">
+              Select the "Business" tab to see articles about business topics
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   )
 }

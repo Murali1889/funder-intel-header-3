@@ -1,202 +1,449 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search, Menu, X, DollarSign } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Search, ChevronRight, Menu } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { MobileNav } from "@/components/mobile-nav"
-import { motion } from "framer-motion"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-export function SiteHeader() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
+export default function SiteHeader() {
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-700",
-        isScrolled ? "bg-primary/95 backdrop-blur-md shadow-md" : "bg-primary/80 backdrop-blur-sm",
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
-          <motion.div
-            className="flex items-center"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            <Link href="/" className="flex items-center">
-              <div className="bg-accent rounded-md w-10 h-10 flex items-center justify-center mr-3">
-                <DollarSign className="h-6 w-6 text-secondary" />
-              </div>
-              <span className="font-bold text-xl text-white">FunderIntel</span>
-            </Link>
-          </motion.div>
+    <header className="sticky top-0 z-50 w-full border-b bg-white">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-950 rounded-md text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6"
+              >
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </div>
+            <span className="font-bold text-xl text-blue-950">FunderIntel</span>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center">
-            <motion.nav
-              className="flex items-center space-x-2"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            >
-              <NavItem label="Marketplace" href="/marketplace" />
-              <NavItem
-                label="Lenders"
-                href="/lenders"
-                hasDropdown
-                items={[
-                  { name: "MCA Providers", href: "/lenders/mca" },
-                  { name: "Term Loan Lenders", href: "/lenders/term-loans" },
-                  { name: "Equipment Financing", href: "/lenders/equipment" },
-                  { name: "Line of Credit", href: "/lenders/loc" },
-                  { name: "SBA Lenders", href: "/lenders/sba" },
-                ]}
-              />
-              <NavItem
-                label="Brokers"
-                href="/brokers"
-                hasDropdown
-                items={[
-                  { name: "Find Brokers", href: "/brokers/directory" },
-                  { name: "Broker Resources", href: "/brokers/resources" },
-                  { name: "Certification", href: "/brokers/certification" },
-                ]}
-              />
-              <NavItem
-                label="Resources"
-                href="/resources"
-                hasDropdown
-                items={[
-                  { name: "Blog", href: "/blog" },
-                  { name: "Market Intelligence", href: "/resources/intelligence" },
-                  { name: "Industry Reports", href: "/resources/reports" },
-                  { name: "Webinars", href: "/resources/webinars" },
-                ]}
-              />
-              <NavItem label="Community" href="/community" />
-              <NavItem label="Premium" href="/premium" className="text-accent" />
-            </motion.nav>
+          <nav className="hidden lg:flex gap-8">
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium text-blue-900">
+                Marketplace
+                <ChevronRight className="h-4 w-4 rotate-90 transition-transform group-hover:rotate-0" />
+              </button>
+              <div className="absolute left-0 top-full hidden pt-2 group-hover:block">
+                <div className="bg-white rounded-md shadow-lg border p-4 w-64">
+                  <div className="space-y-4">
+                    <Link href="/marketplace/lenders" className="block">
+                      <p className="font-medium text-blue-950">Lenders</p>
+                      <p className="text-sm text-blue-800">Find direct funding sources</p>
+                    </Link>
+                    <Link href="/marketplace/brokers" className="block">
+                      <p className="font-medium text-blue-950">Brokers</p>
+                      <p className="text-sm text-blue-800">Connect with loan brokers</p>
+                    </Link>
+                    <Link href="/marketplace/services" className="block">
+                      <p className="font-medium text-blue-950">Service Providers</p>
+                      <p className="text-sm text-blue-800">Discover industry solutions</p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium text-blue-900">
+                Providers
+                <ChevronRight className="h-4 w-4 rotate-90 transition-transform group-hover:rotate-0" />
+              </button>
+              <div className="absolute left-0 top-full hidden pt-2 group-hover:block">
+                <div className="bg-white rounded-md shadow-lg border p-4 w-64">
+                  <div className="space-y-3">
+                    <Link
+                      href="/providers/mca-companies"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      MCA Companies List
+                    </Link>
+                    <Link
+                      href="/providers/startup-financing"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Startup Financing
+                    </Link>
+                    <Link
+                      href="/providers/term-loan-lenders"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Term Loan Lenders
+                    </Link>
+                    <Link
+                      href="/providers/line-of-credit"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Line of Credit Lenders
+                    </Link>
+                    <Link
+                      href="/providers/equipment-lenders"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Equipment Lenders
+                    </Link>
+                    <Link
+                      href="/providers/invoice-factoring"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Invoice Factoring
+                    </Link>
+                    <Link
+                      href="/providers/cannabis-funding"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Cannabis Funding
+                    </Link>
+                    <Link
+                      href="/providers/sba-lenders"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      SBA Lenders
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium text-blue-900">
+                Store
+                <ChevronRight className="h-4 w-4 rotate-90 transition-transform group-hover:rotate-0" />
+              </button>
+              <div className="absolute left-0 top-full hidden pt-2 group-hover:block">
+                <div className="bg-white rounded-md shadow-lg border p-4 w-64">
+                  <div className="space-y-3">
+                    <Link
+                      href="/store/business-tools"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Business Tools
+                    </Link>
+                    <Link
+                      href="/store/gift-cards"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Gift Cards
+                    </Link>
+                    <Link
+                      href="/store/website-development"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Website Development
+                    </Link>
+                    <Link
+                      href="/store/office-products"
+                      className="block text-sm font-medium text-blue-900 hover:text-blue-700"
+                    >
+                      Office Products
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium text-blue-900">
+                Resources
+                <ChevronRight className="h-4 w-4 rotate-90 transition-transform group-hover:rotate-0" />
+              </button>
+              <div className="absolute left-0 top-full hidden pt-2 group-hover:block">
+                <div className="bg-white rounded-md shadow-lg border p-4 w-64">
+                  <div className="space-y-4">
+                    <Link href="/blog" className="block">
+                      <p className="font-medium text-blue-950">Blog</p>
+                      <p className="text-sm text-blue-800">Industry news and insights</p>
+                    </Link>
+                    <Link href="/learning-center" className="block">
+                      <p className="font-medium text-blue-950">Learning Center</p>
+                      <p className="text-sm text-blue-800">Educational resources</p>
+                    </Link>
+                    <Link href="/market-intelligence" className="block">
+                      <p className="font-medium text-blue-950">Market Intelligence</p>
+                      <p className="text-sm text-blue-800">Data and industry trends</p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <button className="flex items-center gap-1 text-sm font-medium text-blue-900">
+                Community
+                <ChevronRight className="h-4 w-4 rotate-90 transition-transform group-hover:rotate-0" />
+              </button>
+              <div className="absolute left-0 top-full hidden pt-2 group-hover:block">
+                <div className="bg-white rounded-md shadow-lg border p-4 w-64">
+                  <div className="space-y-4">
+                    <Link href="/members" className="block">
+                      <p className="font-medium text-blue-950">Members</p>
+                      <p className="text-sm text-blue-800">Browse industry professionals</p>
+                    </Link>
+                    <Link href="/forum" className="block">
+                      <p className="font-medium text-blue-950">Forum</p>
+                      <p className="text-sm text-blue-800">Discuss industry topics</p>
+                    </Link>
+                    <Link href="/events" className="block">
+                      <p className="font-medium text-blue-950">Events</p>
+                      <p className="text-sm text-blue-800">Industry meetups and webinars</p>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Link href="/deals" className="text-sm font-medium text-blue-900 hover:text-blue-700">
+              Deals
+            </Link>
+
+            <Link href="/pro" className="text-sm font-medium text-blue-900 hover:text-blue-700">
+              Pro Plans
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="relative hidden md:flex w-full max-w-sm items-center">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-blue-700" />
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="w-full rounded-full pl-8 md:w-[200px] lg:w-[200px] text-blue-950 bg-white border-gray-100"
+            />
           </div>
 
-          {/* Right side - Login and Search */}
-          <motion.div
-            className="flex items-center"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            <div className="hidden lg:flex items-center text-white text-sm mr-6 space-x-6">
-              <Link href="/login" className="hover:text-accent transition-colors duration-500">
-                Log In
-              </Link>
-              <Link
-                href="/signup"
-                className="bg-accent/10 border border-accent/30 hover:bg-accent hover:text-secondary px-4 py-2 rounded-md transition-all duration-500"
-              >
-                Sign Up
-              </Link>
-            </div>
-
-            <div className="relative hidden sm:block">
-              <Input
-                type="search"
-                placeholder="Search"
-                className="w-[180px] h-10 bg-white/5 border-0 text-white placeholder:text-gray-500 focus-visible:ring-accent/30 rounded-md text-sm"
-              />
-              <Button
-                size="icon"
-                className="absolute right-0 top-0 h-10 w-10 bg-accent hover:bg-accent-light rounded-l-none p-0 transition-colors duration-500"
-              >
-                <Search className="h-4 w-4 text-secondary" />
-                <span className="sr-only">Search</span>
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
+          {/* Replace the login/signup buttons in the desktop view */}
+          <div className="hidden md:flex items-center gap-2">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="text-white ml-2 lg:hidden p-1.5"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              asChild
+              className="text-blue-950 border-gray-300 hover:bg-gray-50 hover:text-blue-950"
             >
-              <span className="sr-only">Toggle menu</span>
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <Link href="/login">Log in</Link>
             </Button>
-          </motion.div>
+            <Button size="sm" asChild className="bg-blue-600 text-white hover:bg-blue-700 whitespace-nowrap">
+              <Link href="/signup">Sign up</Link>
+            </Button>
+          </div>
+
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden text-blue-950">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <div className="flex flex-col gap-6 py-6">
+                <Link href="/" className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-10 h-10 bg-blue-950 rounded-md text-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-6 w-6"
+                    >
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                  </div>
+                  <span className="font-bold text-xl text-blue-950">FunderIntel</span>
+                </Link>
+                <div className="relative flex w-full max-w-sm items-center">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-blue-700" />
+                  <Input
+                    type="search"
+                    placeholder="Search..."
+                    className="w-full rounded-full pl-8 text-blue-950 bg-white border-gray-100"
+                  />
+                </div>
+                <nav className="flex flex-col gap-4">
+                  <div className="border-b pb-2">
+                    <p className="font-medium text-blue-950 mb-2">Marketplace</p>
+                    <div className="pl-4 space-y-2">
+                      <Link
+                        href="/marketplace/lenders"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Lenders
+                      </Link>
+                      <Link
+                        href="/marketplace/brokers"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Brokers
+                      </Link>
+                      <Link
+                        href="/marketplace/services"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Service Providers
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="border-b pb-2">
+                    <p className="font-medium text-blue-950 mb-2">Providers</p>
+                    <div className="pl-4 space-y-2">
+                      <Link
+                        href="/providers/mca-companies"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        MCA Companies
+                      </Link>
+                      <Link
+                        href="/providers/startup-financing"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Startup Financing
+                      </Link>
+                      <Link
+                        href="/providers/term-loan-lenders"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Term Loan Lenders
+                      </Link>
+                      <Link
+                        href="/providers/line-of-credit"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Line of Credit
+                      </Link>
+                      <Link
+                        href="/providers/equipment-lenders"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Equipment Lenders
+                      </Link>
+                      <Link
+                        href="/providers/invoice-factoring"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Invoice Factoring
+                      </Link>
+                      <Link
+                        href="/providers/cannabis-funding"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Cannabis Funding
+                      </Link>
+                      <Link
+                        href="/providers/sba-lenders"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        SBA Lenders
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="border-b pb-2">
+                    <p className="font-medium text-blue-950 mb-2">Store</p>
+                    <div className="pl-4 space-y-2">
+                      <Link
+                        href="/store/business-tools"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Business Tools
+                      </Link>
+                      <Link
+                        href="/store/gift-cards"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Gift Cards
+                      </Link>
+                      <Link
+                        href="/store/website-development"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Website Development
+                      </Link>
+                      <Link
+                        href="/store/office-products"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Office Products
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="border-b pb-2">
+                    <p className="font-medium text-blue-950 mb-2">Resources</p>
+                    <div className="pl-4 space-y-2">
+                      <Link href="/blog" className="block text-sm font-medium text-blue-800 hover:text-blue-950">
+                        Blog
+                      </Link>
+                      <Link
+                        href="/learning-center"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Learning Center
+                      </Link>
+                      <Link
+                        href="/market-intelligence"
+                        className="block text-sm font-medium text-blue-800 hover:text-blue-950"
+                      >
+                        Market Intelligence
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="border-b pb-2">
+                    <p className="font-medium text-blue-950 mb-2">Community</p>
+                    <div className="pl-4 space-y-2">
+                      <Link href="/members" className="block text-sm font-medium text-blue-800 hover:text-blue-950">
+                        Members
+                      </Link>
+                      <Link href="/forum" className="block text-sm font-medium text-blue-800 hover:text-blue-950">
+                        Forum
+                      </Link>
+                      <Link href="/events" className="block text-sm font-medium text-blue-800 hover:text-blue-950">
+                        Events
+                      </Link>
+                    </div>
+                  </div>
+                  <Link href="/deals" className="font-medium text-blue-950 hover:text-blue-700">
+                    Deals
+                  </Link>
+                  <Link href="/pro" className="font-medium text-blue-950 hover:text-blue-700">
+                    Pro Plans
+                  </Link>
+                  <div className="h-px bg-border my-2" />
+                  {/* Replace the login/signup buttons in the mobile view */}
+                  <div className="flex flex-col gap-2 mt-2">
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="text-blue-950 border-gray-300 hover:bg-gray-50 hover:text-blue-950"
+                    >
+                      <Link href="/login">Log in</Link>
+                    </Button>
+                    <Button asChild className="bg-blue-600 text-white hover:bg-blue-700">
+                      <Link href="/signup">Sign up</Link>
+                    </Button>
+                  </div>
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && <MobileNav setIsOpen={setIsMobileMenuOpen} />}
     </header>
-  )
-}
-
-interface NavItemProps {
-  label: string
-  href: string
-  items?: { name: string; href: string }[]
-  className?: string
-  hasDropdown?: boolean
-}
-
-function NavItem({ label, href, items, className, hasDropdown }: NavItemProps) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div className="relative" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-      <Link
-        href={href}
-        className={cn(
-          "flex items-center px-4 py-2 text-sm font-medium text-white transition-colors duration-500 whitespace-nowrap hover:text-accent",
-          isOpen && "text-accent",
-          className,
-        )}
-      >
-        {label}
-        {hasDropdown && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={cn("h-3 w-3 ml-1 transition-transform duration-500", isOpen && "rotate-180")}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        )}
-      </Link>
-      {items && isOpen && (
-        <div className="absolute left-0 mt-1 w-56 rounded-md shadow-lg bg-primary z-50 animate-in fade-in zoom-in-95 duration-300 border border-white/5">
-          <div className="py-1" role="menu" aria-orientation="vertical">
-            {items.map((item, index) => (
-              <Link
-                key={index}
-                href={item.href}
-                className="block px-4 py-2 text-sm text-white hover:bg-primary-light hover:text-accent transition-colors duration-500"
-                role="menuitem"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
   )
 }
 

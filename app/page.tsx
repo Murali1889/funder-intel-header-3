@@ -1,606 +1,502 @@
-"use client"
-
-import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
+import { ChevronRight, ArrowRight, Users, BarChart2, BookOpen } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
-import { ChevronRight, ChevronLeft, DollarSign, LineChart, Monitor, ArrowRight } from "lucide-react"
-import { motion } from "framer-motion"
-
-// Sample statistics
-const statistics = [
-  {
-    number: "5,000+",
-    label: "Active Members",
-  },
-  {
-    number: "$2.5B+",
-    label: "Funding Facilitated",
-  },
-  {
-    number: "350+",
-    label: "Funding Partners",
-  },
-  {
-    number: "98%",
-    label: "Broker Satisfaction",
-  },
-]
-
-// Sample lending categories
-const lendingCategories = [
-  {
-    title: "Merchant Cash Advance",
-    description: "Connect with top MCA lenders offering flexible funding options",
-    badge: "120+ Lenders",
-    icon: <DollarSign className="h-6 w-6 text-accent" />,
-    link: "/marketplace/mca",
-  },
-  {
-    title: "Term Loans",
-    description: "Find lenders offering competitive rates on business term loans",
-    badge: "85+ Lenders",
-    icon: <LineChart className="h-6 w-6 text-accent" />,
-    link: "/marketplace/term-loans",
-  },
-  {
-    title: "Equipment Financing",
-    description: "Specialized lenders for all types of equipment financing needs",
-    badge: "60+ Lenders",
-    icon: <Monitor className="h-6 w-6 text-accent" />,
-    link: "/marketplace/equipment",
-  },
-]
-
-// Sample featured partners
-const featuredPartners = [
-  {
-    name: "Merchant Connect Capital",
-    logo: "https://images.unsplash.com/photo-1622473590773-f588134b6ce7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    description: "Leading provider of merchant cash advances with flexible terms",
-    link: "/partners/merchant-connect",
-  },
-  {
-    name: "Velocity Capital",
-    logo: "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    description: "Specialized in fast-approval business term loans up to $500K",
-    link: "/partners/velocity-capital",
-  },
-  {
-    name: "Apex Funding Solutions",
-    logo: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    description: "Premium equipment financing with competitive rates",
-    link: "/partners/apex-funding",
-  },
-]
-
-// Hero slider images
-const heroSlides = [
-  {
-    image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3",
-    alt: "Business funding dashboard",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3",
-    alt: "Financial growth chart",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3",
-    alt: "Business meeting",
-  },
-]
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
+import FeaturedPartners from "@/components/featured-partners"
+import MarketplacePreview from "@/components/marketplace-preview"
+import TestimonialCarousel from "@/components/testimonial-carousel"
+import PremiumPlans from "@/components/premium-plans"
+import FeaturedDeals from "@/components/featured-deals"
+import DirectFunders from "@/components/direct-funders"
+import TrendingInsights from "@/components/trending-insights"
+import HeroCarousel from "@/components/hero-carousel"
+import { FadeIn, StaggerContainer, StaggerItem, FloatingAnimation } from "@/components/animations"
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const sliderRef = useRef<HTMLDivElement>(null)
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === 2 ? 0 : prev + 1))
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? 2 : prev - 1))
-  }
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (custom: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        delay: custom * 0.15,
-        ease: [0.25, 0.1, 0.25, 1.0], // Improved easing function
-      },
-    }),
-  }
-
   return (
-    <div className="min-h-screen bg-secondary flex flex-col">
-      <SiteHeader />
-
+    <div className="flex min-h-screen flex-col bg-white">
       {/* Hero Section */}
-      <section className="relative bg-primary overflow-hidden min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3')] bg-cover bg-center opacity-5"></div>
-        <div className="max-w-7xl mx-auto px-4 py-20 md:py-28 relative z-10 w-full">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <motion.div
-                className="inline-flex items-center bg-white/5 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/10"
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUpVariants}
-                custom={0}
-              >
-                <span className="text-sm text-white font-medium">The Business Lending Intelligence Platform</span>
-              </motion.div>
-              <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight"
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUpVariants}
-                custom={1}
-              >
-                Connecting <span className="gold-gradient">Lenders,</span> <br />
-                Brokers & Businesses
-              </motion.h1>
-              <motion.p
-                className="mt-6 text-xl text-white/70 max-w-lg"
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUpVariants}
-                custom={2}
-              >
-                FunderIntel is the premier marketplace and intelligence platform for the business lending industry,
-                connecting funders, brokers, and service providers.
-              </motion.p>
-              <motion.div
-                className="mt-10 flex flex-wrap gap-4"
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUpVariants}
-                custom={3}
-              >
-                <Button
-                  size="lg"
-                  className="bg-accent hover:bg-accent-light text-secondary font-medium px-8 py-6 text-base transition-all duration-500"
-                >
-                  Join the Network
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-white/20 text-white hover:bg-white/5 hover:border-white/30 px-8 py-6 text-base transition-all duration-500"
-                >
-                  Explore Marketplace
-                </Button>
-              </motion.div>
-            </div>
-            <div className="md:w-1/2 relative">
-              <motion.div
-                className="relative h-[300px] md:h-[500px] w-full overflow-hidden rounded-lg shadow-2xl"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1.0] }}
-              >
-                <div
-                  ref={sliderRef}
-                  className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
-                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                >
-                  {heroSlides.map((slide, index) => (
-                    <div key={index} className="min-w-full h-full relative">
-                      <Image
-                        src={slide.image || "/placeholder.svg"}
-                        alt={slide.alt}
-                        fill
-                        className="object-cover"
-                        priority={index === 0}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors duration-500"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <button
-                  onClick={nextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors duration-500"
-                >
-                  <ChevronRight size={24} />
-                </button>
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3">
-                  {[0, 1, 2].map((idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentSlide(idx)}
-                      className={`w-3 h-3 rounded-full transition-colors duration-500 ${
-                        currentSlide === idx ? "bg-accent" : "bg-white/50"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          </div>
+      <section className="w-full py-16 md:py-24 lg:py-32 bg-blue-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=2073&auto=format&fit=crop"
+            alt="Business background"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950 via-blue-900/90 to-blue-950"></div>
         </div>
-      </section>
 
-      {/* Statistics Section */}
-      <section className="py-16 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-            {statistics.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="stats-item"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1.0] }}
-              >
-                <div className="stats-number">{stat.number}</div>
-                <div className="stats-label">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+        <div className="container px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <FadeIn direction="up" delay={0.1}>
+                <div className="inline-block px-2 py-1 mb-4 text-xs font-medium rounded-full bg-blue-800 text-white">
+                  The Business Lending Intelligence Platform
+                </div>
+              </FadeIn>
 
-      {/* Section Divider */}
-      <div className="section-divider bg-secondary"></div>
+              <FadeIn direction="up" delay={0.2}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-4">
+                  Connecting Funders, Brokers & ISOs
+                </h1>
+              </FadeIn>
 
-      {/* Marketplace Section */}
-      <section className="py-20 bg-secondary-dark">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] }}
-          >
-            <div className="inline-flex items-center bg-white/5 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 border border-white/10">
-              <span className="text-sm text-white font-medium">Marketplace</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">The Business Lending Marketplace</h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Connect with top lenders, brokers, and service providers in the business lending industry
-            </p>
-          </motion.div>
+              <FadeIn direction="up" delay={0.3}>
+                <p className="text-base md:text-lg text-white mb-6 max-w-[600px]">
+                  The premier platform for business lending professionals to find partners, access resources, and grow
+                  their business.
+                </p>
+              </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {lendingCategories.map((category, index) => (
-              <motion.div
-                key={index}
-                className="category-card p-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1.0] }}
-              >
-                <div className="category-badge">{category.badge}</div>
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mr-3">
-                    {category.icon}
+              <FadeIn direction="up" delay={0.4}>
+                <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                  <Button size="lg" variant="primary" asChild className="px-6 py-3 h-auto">
+                    <Link href="/signup" className="flex items-center">
+                      Start Your Journey as a Broker Today!
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    asChild
+                    className="px-6 py-3 h-auto border-white text-black hover:bg-white/10 hover:text-white"
+                  >
+                    <Link href="/marketplace">Find Reliable Funders and Partners</Link>
+                  </Button>
+                </div>
+              </FadeIn>
+
+              <FadeIn direction="up" delay={0.5}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 pt-8 border-t border-blue-800">
+                  <div>
+                    <p className="text-2xl md:text-3xl font-bold">5,000+</p>
+                    <p className="text-sm text-blue-100">Active Lending Professionals</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl md:text-3xl font-bold">$2.5B+</p>
+                    <p className="text-sm text-blue-100">Business Financing Facilitated</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl md:text-3xl font-bold">350+</p>
+                    <p className="text-sm text-blue-100">Trusted Funding Partners</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl md:text-3xl font-bold">98%</p>
+                    <p className="text-sm text-blue-100">ISO & Broker Satisfaction</p>
                   </div>
                 </div>
-                <h3 className="category-title">{category.title}</h3>
-                <p className="category-description">{category.description}</p>
-                <Link href={category.link} className="category-button">
-                  View Lenders <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </motion.div>
-            ))}
+              </FadeIn>
+            </div>
+            <div className="hidden lg:block">
+              <FloatingAnimation distance={10} duration={4}>
+                <HeroCarousel />
+              </FloatingAnimation>
+            </div>
           </div>
-
-          <motion.div
-            className="mt-16 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1.0] }}
-          >
-            <Button className="bg-accent hover:bg-accent-light text-secondary px-8 py-6 text-base transition-all duration-500">
-              Explore Full Marketplace <ChevronRight className="ml-2 h-5 w-5" />
-            </Button>
-          </motion.div>
         </div>
       </section>
 
-      {/* Section Divider */}
-      <div className="section-divider-reverse bg-secondary-dark"></div>
-
-      {/* Featured Partners */}
-      <section className="py-20 bg-primary">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] }}
-          >
-            <div className="inline-flex items-center bg-white/5 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 border border-white/10">
-              <span className="text-sm text-white font-medium">Featured Partners</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Top-Rated Funding Providers</h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Discover industry-leading funding solutions from our verified partners
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredPartners.map((partner, index) => (
-              <motion.div
-                key={index}
-                className="partner-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1.0] }}
+      {/* Direct Funders Section */}
+      <section className="w-full py-12 md:py-16 bg-white">
+        <div className="container px-4 md:px-6">
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">Direct Funders</h2>
+              <Link
+                href="/direct-funders"
+                className="text-sm font-medium text-blue-600 flex items-center hover:text-blue-800"
               >
-                <div className="h-16 flex items-center justify-center mb-6">
-                  <div className="relative h-12 w-full">
+                View All Funders
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Link>
+            </div>
+          </FadeIn>
+
+          <DirectFunders />
+        </div>
+      </section>
+
+      {/* Featured Partners Carousel */}
+      {/* <section className="w-full py-8 bg-slate-50 border-y">
+        <div className="container">
+          <FadeIn direction="up">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900">Featured Partners</h2>
+              <Link
+                href="/partners"
+                className="text-sm font-medium text-blue-600 flex items-center hover:text-blue-800"
+              >
+                View all partners
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Link>
+            </div>
+          </FadeIn>
+          <FeaturedPartners />
+        </div>
+      </section> */}
+
+      {/* Marketplace Preview */}
+      <section className="w-full py-12 md:py-24 lg:py-32 relative overflow-hidden bg-white">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2032&auto=format&fit=crop"
+            alt="Business marketplace"
+            fill
+            className="object-cover opacity-5"
+          />
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-900 hover:bg-blue-100/80">Marketplace</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
+                  Access a Directory of Trusted Funders
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Find the most reliable funders who provide competitive terms and excellent customer service.
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <MarketplacePreview />
+
+          <FadeIn direction="up">
+            <div className="flex justify-center mt-12">
+              <Button size="lg" variant="primary" asChild>
+                <Link href="/marketplace">
+                  Explore Full Marketplace
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Featured Deals Section */}
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=2187&auto=format&fit=crop"
+            alt="Business deals"
+            fill
+            className="object-cover opacity-5"
+          />
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-900 hover:bg-blue-100/80">Exclusive Offers</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
+                  Special Deals
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Save money with these exclusive offers from our trusted partners
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FeaturedDeals />
+
+          <FadeIn direction="up">
+            <div className="flex justify-center mt-12">
+              <Button size="lg" variant="secondary" asChild>
+                <Link href="/deals">
+                  View All Deals
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Premium Plans Section - Monetization */}
+      <section className="w-full py-12 md:py-24 lg:py-32 relative overflow-hidden bg-white">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2070&auto=format&fit=crop"
+            alt="Premium plans"
+            fill
+            className="object-cover opacity-5"
+          />
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-900 hover:bg-blue-100/80">Premium Plans</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
+                  Join a Network of Industry Experts
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Build your professional network with ISOs, funders, and brokers from around the world.
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <PremiumPlans />
+        </div>
+      </section>
+
+      {/* Trending Insights - Data Monetization */}
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+            alt="Market insights"
+            fill
+            className="object-cover opacity-5"
+          />
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-900 hover:bg-blue-100/80">Market Intelligence</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
+                  Stay Informed with Industry News
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Keep up-to-date with the latest trends in business lending and merchant financing through articles,
+                  webinars, and live events.
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <TrendingInsights />
+
+          <FadeIn direction="up">
+            <div className="flex justify-center mt-12">
+              <Button size="lg" variant="accent" asChild>
+                <Link href="/market-intelligence">
+                  Access Full Intelligence Platform
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-blue-950 text-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop"
+            alt="Business testimonials"
+            fill
+            className="object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950 via-blue-900/90 to-blue-950"></div>
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-800 text-white hover:bg-blue-800/90">Testimonials</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">What Our Members Say</h2>
+                <p className="max-w-[900px] text-white md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Hear from brokers, lenders, and businesses who have found success on our platform
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <TestimonialCarousel />
+        </div>
+      </section>
+
+      {/* Resources Preview */}
+      <section className="w-full py-12 md:py-24 lg:py-32 relative overflow-hidden bg-white">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
+            alt="Knowledge resources"
+            fill
+            className="object-cover opacity-5"
+          />
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <FadeIn direction="up">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <Badge className="bg-blue-100 text-blue-900 hover:bg-blue-100/80">Resources</Badge>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
+                  Get the Education You Need to Succeed
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Learn about business loans, merchant cash advances, and compliance through expert-led training
+                  modules.
+                </p>
+              </div>
+            </div>
+          </FadeIn>
+
+          <StaggerContainer>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StaggerItem>
+                <Card className="overflow-hidden bg-white border border-gray-200">
+                  <div className="aspect-video relative">
                     <Image
-                      src={partner.logo || "/placeholder.svg"}
-                      alt={partner.name}
+                      src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop"
+                      alt="Learning Center"
                       fill
-                      className="object-contain"
+                      className="object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                      <div className="p-4">
+                        <Badge className="bg-blue-500 hover:bg-blue-500/90 mb-2">Learning Center</Badge>
+                        <h3 className="text-lg font-bold text-white">Educational Resources</h3>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">{partner.name}</h3>
-                <p className="text-gray-400 text-sm mb-6">{partner.description}</p>
-                <Link
-                  href={partner.link}
-                  className="text-accent hover:text-accent-light flex items-center text-sm font-medium transition-colors duration-500"
-                >
-                  Learn more <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                  <div className="p-4">
+                    <p className="text-gray-600 mb-4">
+                      Access courses, guides, and tutorials on business lending best practices
+                    </p>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/learning-center">
+                        Explore Resources
+                        <BookOpen className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </Card>
+              </StaggerItem>
 
-      {/* Section Divider */}
-      <div className="section-divider bg-primary"></div>
+              <StaggerItem>
+                <Card className="overflow-hidden bg-white border border-gray-200">
+                  <div className="aspect-video relative">
+                    <Image
+                      src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop"
+                      alt="Community Forum"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                      <div className="p-4">
+                        <Badge className="bg-blue-500 hover:bg-blue-500/90 mb-2">Community</Badge>
+                        <h3 className="text-lg font-bold text-white">Industry Forum</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-600 mb-4">
+                      Connect with peers, share insights, and discuss industry trends
+                    </p>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/forum">
+                        Join Discussions
+                        <Users className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </Card>
+              </StaggerItem>
 
-      {/* Premium Plans Section */}
-      <section
-        className="py-20 bg-secondary-dark relative"
-        style={{
-          backgroundImage:
-            'url("https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-secondary-dark/90"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] }}
-          >
-            <div className="inline-flex items-center bg-white/5 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 border border-white/10">
-              <span className="text-sm text-white font-medium">Premium Plans</span>
+              <StaggerItem>
+                <Card className="overflow-hidden bg-white border border-gray-200">
+                  <div className="aspect-video relative">
+                    <Image
+                      src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
+                      alt="Software Solutions"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                      <div className="p-4">
+                        <Badge className="bg-blue-500 hover:bg-blue-500/90 mb-2">Tools</Badge>
+                        <h3 className="text-lg font-bold text-white">Software Solutions</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-gray-600 mb-4">
+                      Discover tools for document automation, CRM, and business operations
+                    </p>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/software">
+                        View Solutions
+                        <BarChart2 className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </Card>
+              </StaggerItem>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Unlock Premium Features</h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Choose the plan that's right for your business and take your lending operations to the next level
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Basic Plan */}
-            <motion.div
-              className="pricing-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] }}
-            >
-              <h3 className="pricing-title">Basic</h3>
-              <p className="pricing-description">Essential features for individuals</p>
-              <div className="pricing-price">
-                $0<span className="text-lg font-normal text-gray-400">/month</span>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Basic marketplace access</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Community forum access</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Limited resource library</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Basic profile listing</span>
-                </li>
-              </ul>
-
-              <Button className="w-full bg-white/10 hover:bg-white/20 text-white transition-all duration-500 py-6">
-                Get Started
-              </Button>
-            </motion.div>
-
-            {/* Pro Plan */}
-            <motion.div
-              className="pricing-card pricing-popular"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.1, 0.25, 1.0] }}
-            >
-              <div className="absolute -top-3 right-6 bg-accent text-secondary text-xs font-bold px-3 py-1 rounded-full">
-                Popular
-              </div>
-              <h3 className="pricing-title">Pro</h3>
-              <p className="pricing-description">Advanced features for professionals</p>
-              <div className="pricing-price">
-                $49<span className="text-lg font-normal text-gray-400">/month</span>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Full marketplace access</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Priority profile listing</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Deal matching technology</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>10 leads per month</span>
-                </li>
-              </ul>
-
-              <Button className="w-full bg-accent hover:bg-accent-light text-secondary font-medium transition-all duration-500 py-6">
-                Upgrade to Pro
-              </Button>
-            </motion.div>
-
-            {/* Enterprise Plan */}
-            <motion.div
-              className="pricing-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1.0] }}
-            >
-              <h3 className="pricing-title">Enterprise</h3>
-              <p className="pricing-description">Premium features for businesses</p>
-              <div className="pricing-price">
-                $199<span className="text-lg font-normal text-gray-400">/month</span>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Everything in Pro</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Advanced market intelligence</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Unlimited leads</span>
-                </li>
-                <li className="pricing-feature">
-                  <svg className="pricing-check h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Dedicated account manager</span>
-                </li>
-              </ul>
-
-              <Button className="w-full bg-white/10 hover:bg-white/20 text-white transition-all duration-500 py-6">
-                Contact Sales
-              </Button>
-            </motion.div>
-          </div>
+          </StaggerContainer>
         </div>
       </section>
-
-      {/* Section Divider */}
-      <div className="section-divider-reverse bg-secondary-dark"></div>
 
       {/* CTA Section */}
-      <section
-        className="py-20 bg-primary relative"
-        style={{
-          backgroundImage:
-            'url("https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.0.3")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-primary/90"></div>
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1.0] }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Grow Your Business?</h2>
-            <p className="text-xl text-white/70 mb-10">
-              Join thousands of professionals who are growing their business with FunderIntel.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Button
-                size="lg"
-                className="bg-accent hover:bg-accent-light text-secondary font-medium px-8 py-6 text-base transition-all duration-500"
-              >
-                Create Free Account
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent border-white/20 text-white hover:bg-white/5 hover:border-white/30 px-8 py-6 text-base transition-all duration-500"
-              >
-                Request Demo
-              </Button>
-            </div>
-          </motion.div>
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-blue-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2069&auto=format&fit=crop"
+            alt="Business partnership"
+            fill
+            className="object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-800/90 to-blue-900"></div>
+        </div>
+
+        <div className="container px-4 md:px-6 relative z-10">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
+            <FadeIn direction="left">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  Boost Your Business with Personalized Consulting
+                </h2>
+                <p className="mt-4 text-xl text-white">
+                  Work with experienced consultants to improve your underwriting processes, ISO partnerships, and
+                  marketing strategies.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                  <Button size="lg" variant="primary" asChild>
+                    <Link href="/signup">
+                      Book Your Free Consultation with Our Experts
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" asChild className="border-white text-black hover:bg-white/10 hover:text-white">
+                    <Link href="/demo">Request Demo</Link>
+                  </Button>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn direction="right">
+              <div className="relative aspect-video overflow-hidden rounded-xl border shadow-sm">
+                <Image
+                  src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?q=80&w=2070&auto=format&fit=crop"
+                  alt="Platform Overview"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   )
 }

@@ -1,212 +1,161 @@
-"use client"
-
 import Link from "next/link"
-import { DollarSign, Phone } from "lucide-react"
+import { Facebook, Twitter, Instagram } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
-export function SiteFooter() {
+export default function SiteFooter() {
   return (
-    <footer className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 px-4 py-16">
-          {/* Column 1: About */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center mb-6">
-              <div className="bg-accent rounded-md w-10 h-10 flex items-center justify-center mr-3">
-                <DollarSign className="h-6 w-6 text-secondary" />
+    <footer className="w-full bg-white text-gray-800 py-16 border-t">
+      <div className="container px-4 md:px-6 mx-auto">
+        {/* Logo and Description */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <div className="md:col-span-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-10 h-10 bg-blue-950 rounded-md flex items-center justify-center text-white">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
               </div>
-              <span className="font-bold text-xl text-white">FunderIntel</span>
+              <span className="font-bold text-xl">FunderIntel</span>
             </div>
-            <p className="text-sm text-gray-400 mb-8">
+            <p className="text-gray-600 mb-6">
               The premier marketplace and intelligence platform for the business lending industry.
             </p>
-            <div className="flex space-x-4 mb-8">
-              <a href="#" className="bg-white/5 hover:bg-white/10 p-2 rounded-full transition-colors duration-500">
-                <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-                </svg>
-              </a>
-              <a href="#" className="bg-white/5 hover:bg-white/10 p-2 rounded-full transition-colors duration-500">
-                <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                </svg>
-              </a>
-              <a href="#" className="bg-white/5 hover:bg-white/10 p-2 rounded-full transition-colors duration-500">
-                <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </a>
+            <div className="flex space-x-4 mb-6">
+              <Button variant="ghost" size="icon" asChild className="h-8 w-8 rounded-full">
+                <Link href="https://facebook.com" className="text-gray-500 hover:text-blue-600">
+                  <Facebook className="h-4 w-4" />
+                  <span className="sr-only">Facebook</span>
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild className="h-8 w-8 rounded-full">
+                <Link href="https://twitter.com" className="text-gray-500 hover:text-blue-600">
+                  <Twitter className="h-4 w-4" />
+                  <span className="sr-only">Twitter</span>
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild className="h-8 w-8 rounded-full">
+                <Link href="https://instagram.com" className="text-gray-500 hover:text-blue-600">
+                  <Instagram className="h-4 w-4" />
+                  <span className="sr-only">Instagram</span>
+                </Link>
+              </Button>
             </div>
-            <div className="flex items-center text-sm text-gray-400">
-              <Phone className="h-4 w-4 mr-2" />
-              <span>954-861-0821</span>
+            <div className="flex items-center gap-2">
+              <Link href="tel:954-861-0821" className="text-gray-600 hover:text-blue-600 flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-blue-600"
+                >
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                954-861-0821
+              </Link>
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div>
-            <h3 className="text-base font-semibold mb-6 text-white">Quick Links</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/blog" className="text-sm text-gray-400 hover:text-accent transition-colors duration-500">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/community"
-                  className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                >
-                  Community Forum
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/courses"
-                  className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                >
-                  Broker Course
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/premium"
-                  className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                >
-                  Premium Plans
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                >
-                  Book A Call
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/advertise"
-                  className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                >
-                  Advertise With Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Funders Directory */}
-          <div>
-            <h3 className="text-base font-semibold mb-6 text-white">Funders Directory</h3>
-            <div className="grid grid-cols-2 gap-x-4">
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    href="/lenders/mca"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    MCA Providers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/term-loans"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Term Loan Lenders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/loc"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Line of Credit
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/startup"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Startup Financing
-                  </Link>
-                </li>
-              </ul>
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    href="/lenders/equipment"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Equipment Lenders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/invoice"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Invoice Factoring
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/cannabis"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    Cannabis Funding
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/lenders/sba"
-                    className="text-sm text-gray-400 hover:text-accent transition-colors duration-500"
-                  >
-                    SBA Lenders
-                  </Link>
-                </li>
-              </ul>
+          <div className="md:col-span-3 md:col-start-5">
+            <h3 className="font-bold text-lg mb-4 text-blue-950">Quick Links</h3>
+            <div className="grid grid-cols-1 gap-y-3">
+              <Link href="/blog" className="text-gray-600 hover:text-blue-600">
+                Blog
+              </Link>
+              <Link href="/forum" className="text-gray-600 hover:text-blue-600">
+                Community Forum
+              </Link>
+              <Link href="/courses/broker" className="text-gray-600 hover:text-blue-600">
+                Broker Course
+              </Link>
+              <Link href="/pro-plans" className="text-gray-600 hover:text-blue-600">
+                Premium Plans
+              </Link>
+              <Link href="/contact/book-call" className="text-gray-600 hover:text-blue-600">
+                Book A Call
+              </Link>
+              <Link href="/advertise" className="text-gray-600 hover:text-blue-600">
+                Advertise With Us
+              </Link>
             </div>
           </div>
 
-          {/* Column 4: Newsletter */}
-          <div>
-            <h3 className="text-base font-semibold mb-6 text-white">Stay Updated</h3>
-            <p className="text-sm text-gray-400 mb-4">
-              Subscribe to our newsletter for the latest industry insights and updates.
-            </p>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="bg-white/5 border-0 text-white placeholder:text-gray-500 rounded-l-md px-4 py-2 text-sm w-full focus:outline-none focus:ring-1 focus:ring-accent"
-              />
-              <button className="bg-accent hover:bg-accent-light text-secondary px-4 py-2 rounded-r-md text-sm font-medium transition-colors duration-500">
-                Subscribe
-              </button>
+          <div className="md:col-span-5">
+            <h3 className="font-bold text-lg mb-4 text-blue-950">Funders Directory</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/mca-companies" className="text-gray-700 hover:text-blue-700 font-medium">
+                  MCA Providers
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/equipment-lenders" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Equipment Lenders
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/term-loan-lenders" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Term Loan Lenders
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/invoice-factoring" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Invoice Factoring
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/line-of-credit" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Line of Credit
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/cannabis-funding" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Cannabis Funding
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/startup-financing" className="text-gray-700 hover:text-blue-700 font-medium">
+                  Startup Financing
+                </Link>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-md hover:bg-blue-50 transition-colors">
+                <Link href="/providers/sba-lenders" className="text-gray-700 hover:text-blue-700 font-medium">
+                  SBA Lenders
+                </Link>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              By subscribing, you agree to our Privacy Policy and Terms of Service.
-            </p>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-white/5 px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500">© 2021-2025 by Funder Intel LLC. All Rights Reserved.</p>
-            <div className="flex space-x-8 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors duration-500">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-sm text-gray-500 hover:text-white transition-colors duration-500">
-                Terms of Service
-              </Link>
-              <Link href="/sitemap" className="text-sm text-gray-500 hover:text-white transition-colors duration-500">
-                Sitemap
-              </Link>
-            </div>
+        {/* Newsletter Subscription */}
+        <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+          <p>© 2021-2025 by Funder Intel LLC, All Rights Reserved.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <Link href="/privacy-policy" className="hover:text-blue-600">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-blue-600">
+              Terms of Service
+            </Link>
+            <Link href="/sitemap" className="hover:text-blue-600">
+              Sitemap
+            </Link>
           </div>
         </div>
       </div>
