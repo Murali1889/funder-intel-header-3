@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, ArrowRight, Users, BarChart2, BookOpen } from "lucide-react"
+import {FeedbackProvider} from '@/context/FeedbackContext'
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
